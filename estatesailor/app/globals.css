@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: linear-gradient(180deg, #49dbff 0%, #0aa8cb    50%, #d2a51d 100%); /* Ocean to beach gradient */
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -32,7 +32,7 @@
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: linear-gradient(180deg, #f2f512 0%, #007f5f 50%, #c2b280 100%); /* Darker ocean to beach gradient */
     --foreground: 210 40% 98%;
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
@@ -64,6 +64,55 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
+    background: var(--background); /* Apply the gradient background */
+    min-height: 100vh; /* Ensure the background covers the viewport height */
+    background-size: cover; /* Ensure the background fills the area */
   }
+}
+
+.center-dropdown {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.main {
+  position: relative;
+  overflow: hidden;
+}
+
+.wavyBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(0, 0, 0, 0.038),
+    rgba(0, 0, 0, 0.017) 20px,
+    transparent 20px,
+    transparent 40px
+  );
+  z-index: -1;
+}
+
+.navy-bar {
+  background: rgba(255, 255, 255, 0.203); /* Hazy white background */
+}
+
+.background-container {
+  position: relative;
+  height: 100%;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80') no-repeat center center/cover;
+  opacity: .6; /* Adjust the opacity as needed */
 }
