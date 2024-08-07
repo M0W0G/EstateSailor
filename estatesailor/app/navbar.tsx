@@ -32,6 +32,11 @@ export default function Navbar() {
     if (error) console.error("Error signing in with Google:", error.message);
   };
 
+  const handleSignOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) console.error("Error signing out:", error.message);
+  };
+
   return (
     <header className="navy-bar sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
       <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
@@ -134,9 +139,13 @@ export default function Navbar() {
             />
           </div>
         </form>
-        {!user && (
+        {!user ? (
           <Button onClick={handleGoogleSignIn} variant="outline">
             Sign in with Google
+          </Button>
+        ) : (
+          <Button onClick={handleSignOut} variant="outline">
+            Sign out
           </Button>
         )}
       </div>
