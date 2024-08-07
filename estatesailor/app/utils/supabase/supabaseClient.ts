@@ -1,3 +1,5 @@
+// Test
+
 import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
 // Note: The import statement for NEXT_PUBLIC_SUPABASE_URL from .env.local is not possible directly in TypeScript/JavaScript.
