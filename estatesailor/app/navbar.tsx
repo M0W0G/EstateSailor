@@ -11,8 +11,27 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { useAuth } from "@/context/authContext";
+import { supabase } from "@/app/utils/supabase/supabaseClient";
 
 export default function Navbar() {
+  const user = useAuth();
+
+  console.log("user object:  " + user)
+  if (user) {
+    console.log("User Name: " + user.user_metadata.full_name);
+    console.log("User Email: " + user.email);
+  } else {
+    console.log("No user is signed in.");
+  }
+
+  const handleGoogleSignIn = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+    });
+    if (error) console.error("Error signing in with Google:", error.message);
+  };
+
   return (
     <header className="navy-bar sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
       <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
@@ -115,6 +134,11 @@ export default function Navbar() {
             />
           </div>
         </form>
+        {!user && (
+          <Button onClick={handleGoogleSignIn} variant="outline">
+            Sign in with Google
+          </Button>
+        )}
       </div>
     </header>
   );
