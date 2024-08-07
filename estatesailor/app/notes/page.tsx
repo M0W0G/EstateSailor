@@ -2,7 +2,7 @@ import { createClient } from '@/app/utils/supabase/server';
 
 export default async function Notes() {
   const supabase = createClient();
-  const { data: notes } = await supabase.from("notes").select();
+  const { data: users } = await supabase.from("users").select();
 
-  return <pre>{JSON.stringify(notes, null, 2)}</pre>
+  return <pre>{JSON.stringify(users, null, 2)}</pre>
 }
