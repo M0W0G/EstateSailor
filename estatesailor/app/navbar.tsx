@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { CircleUser, Menu, Package2, Search } from "lucide-react";
@@ -11,30 +13,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { useAuth } from "@/context/authContext";
-import { supabase } from "@/app/utils/supabase/supabaseClient";
+import { supabase } from "@/lib/supabase";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
-  const user = useAuth();
-
-  console.log("user object:  " + user)
-  if (user) {
-    console.log("User Name: " + user.user_metadata.full_name);
-    console.log("User Email: " + user.email);
-  } else {
-    console.log("No user is signed in.");
-  }
-
-  const handleGoogleSignIn = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-    });
-    if (error) console.error("Error signing in with Google:", error.message);
-  };
-
+  const router = useRouter();
   const handleSignOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) console.error("Error signing out:", error.message);
+    await supabase.auth.signOut();
+    router.refresh();
   };
 
   return (
@@ -48,7 +34,7 @@ export default function Navbar() {
           <span className="sr-only">Acme Inc</span>
         </Link>
         <Link
-          href="#"
+          href="/"
           className="text-muted-foreground transition-colors hover:text-foreground"
         >
           Dashboard
@@ -77,6 +63,20 @@ export default function Navbar() {
         >
           Settings
         </Link>
+        <Link
+          href="/login"
+          className="text-foreground transition-colors hover:text-foreground"
+        >
+          Login
+        </Link>
+        <Button
+          variant="outline"
+          size="sm"
+          className="text-foreground transition-colors hover:text-foreground"
+          onClick={handleSignOut}
+        >
+          Sign Out
+        </Button>
       </nav>
       <Sheet>
         <SheetTrigger asChild>
@@ -99,7 +99,7 @@ export default function Navbar() {
               <span className="sr-only">Acme Inc</span>
             </Link>
             <Link
-              href="#"
+              href="/"
               className="text-muted-foreground hover:text-foreground"
             >
               Dashboard
@@ -125,6 +125,20 @@ export default function Navbar() {
             <Link href="#" className="hover:text-foreground">
               Settings
             </Link>
+            <Link
+              href="/login"
+              className="hover:text-foreground"
+            >
+              Login
+            </Link>
+            <Button
+              variant="outline"
+              size="sm"
+              className="hover:text-foreground"
+              onClick={handleSignOut}
+            >
+              Sign Out
+            </Button>
           </nav>
         </SheetContent>
       </Sheet>
@@ -139,15 +153,6 @@ export default function Navbar() {
             />
           </div>
         </form>
-        {!user ? (
-          <Button onClick={handleGoogleSignIn} variant="outline">
-            Sign in with Google
-          </Button>
-        ) : (
-          <Button onClick={handleSignOut} variant="outline">
-            Sign out
-          </Button>
-        )}
       </div>
     </header>
   );
