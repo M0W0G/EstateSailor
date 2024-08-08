@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { getUser, fetchSales, addSale } from '@/app/utils/userUtils';
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
@@ -53,7 +53,13 @@ const Profile2Page = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Hi {user?.email || 'Guest'}</h1>
+      <Card className="w-full max-w-md mx-auto mb-4">
+        <CardHeader>
+          <CardTitle className="text-2xl font-bold">Welcome</CardTitle>
+          <CardDescription className="text-lg">{user?.email || 'Guest'}</CardDescription>
+        </CardHeader>
+      </Card>
+
       <Card className="w-full max-w-md mx-auto mb-4">
         <CardHeader>
           <CardTitle>Your Sales</CardTitle>

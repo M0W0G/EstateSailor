@@ -4,17 +4,17 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { supabase } from "@/lib/supabase";
 import { fetchItems, addItem } from '@/app/utils/userUtils';
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft } from 'lucide-react'; // Import the ArrowLeft icon
+import { ArrowLeft } from 'lucide-react';
 
 const SalePage = () => {
   const params = useParams();
-  const router = useRouter(); // Add this line to use the router
+  const router = useRouter();
   const [sale, setSale] = useState<any>(null);
   const [items, setItems] = useState<any[]>([]);
   const [newItemName, setNewItemName] = useState('');
@@ -75,8 +75,12 @@ const SalePage = () => {
         <ArrowLeft className="mr-2 h-4 w-4" /> Back to Profile
       </Button>
 
-      <h1 className="text-3xl font-bold mb-4">{sale.name}</h1>
-      <p className="text-lg mb-4">{sale.description}</p>
+      <Card className="w-full max-w-md mx-auto mb-4">
+        <CardHeader>
+          <CardTitle className="text-2xl font-bold">{sale.name}</CardTitle>
+          <CardDescription className="text-l">{sale.description}</CardDescription>
+        </CardHeader>
+      </Card>
       
       <Card className="w-full max-w-md mx-auto mb-4">
         <CardHeader>
