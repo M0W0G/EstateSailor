@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
+import { getUser, fetchSales, addSale, addItem } from '@/app/utils/userUtils';
 
 const ProfilePage = () => {
   const [user, setUser] = useState<any>(null);
@@ -16,30 +16,20 @@ const ProfilePage = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      setUser(user);
-      if (user) {
-        fetchSales(user.id);
+    const initUser = async () => {
+      const currentUser = await getUser();
+      setUser(currentUser);
+      if (currentUser) {
+        try {
+          const salesData = await fetchSales(currentUser.id);
+          setSales(salesData);
+        } catch (error) {
+          setMessage(`Error fetching sales: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        }
       }
     };
-    getUser();
+    initUser();
   }, []);
-
-  const fetchSales = async (userId: string) => {
-    const { data, error } = await supabase
-      .from('sale')
-      .select('id, name')
-      .eq('account_id', userId)
-      .eq('is_active', true);
-
-    if (error) {
-      console.error('Error fetching sales:', error);
-      setMessage(`Error fetching sales: ${error.message}`);
-    } else {
-      setSales(data || []);
-    }
-  };
 
   const handleSaleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,27 +39,13 @@ const ProfilePage = () => {
         return;
       }
 
-      const { data, error } = await supabase
-        .from('sale')
-        .insert([
-          { 
-            account_id: user.id,
-            name: saleName,
-            description: saleDescription,
-            is_active: true
-          }
-        ]);
-
-      if (error) {
-        setMessage(`Error: ${error.message}`);
-      } else {
-        setMessage('Sale added successfully!');
-        setSaleName('');
-        setSaleDescription('');
-        fetchSales(user.id);  // Refresh the sales list
-      }
+      await addSale(user.id, saleName, saleDescription);
+      setMessage('Sale added successfully!');
+      setSaleName('');
+      setSaleDescription('');
+      const updatedSales = await fetchSales(user.id);
+      setSales(updatedSales);
     } catch (error) {
-      console.error('Error:', error);
       setMessage(`Error: ${error instanceof Error ? error.message : 'An unknown error occurred'}`);
     }
   };
@@ -87,26 +63,11 @@ const ProfilePage = () => {
         return;
       }
 
-      const { data, error } = await supabase
-        .from('item')
-        .insert([
-          { 
-            sale_id: selectedSale,
-            name: itemName,
-            description: itemDescription,
-            is_active: true
-          }
-        ]);
-
-      if (error) {
-        setMessage(`Error: ${error.message}`);
-      } else {
-        setMessage('Item added successfully!');
-        setItemName('');
-        setItemDescription('');
-      }
+      await addItem(selectedSale, itemName, itemDescription);
+      setMessage('Item added successfully!');
+      setItemName('');
+      setItemDescription('');
     } catch (error) {
-      console.error('Error:', error);
       setMessage(`Error: ${error instanceof Error ? error.message : 'An unknown error occurred'}`);
     }
   };
