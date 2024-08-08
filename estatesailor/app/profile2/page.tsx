@@ -76,10 +76,12 @@ const Profile2Page = () => {
         <DialogTrigger asChild>
           <Button className="w-full max-w-md mx-auto block">Create New Sale</Button>
         </DialogTrigger>
-        <DialogContent>
+        <DialogContent className="bg-white bg-opacity-90 backdrop-blur-sm">
           <DialogHeader>
-            <DialogTitle>Create New Sale</DialogTitle>
-            <DialogDescription>Enter the details for your new sale.</DialogDescription>
+            <DialogTitle className="text-2xl font-bold">Create New Sale</DialogTitle>
+            <DialogDescription className="text-lg">
+              Enter the details for your new sale.
+            </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">

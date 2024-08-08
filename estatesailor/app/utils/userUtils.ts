@@ -60,3 +60,18 @@ export const addItem = async (saleId: string, itemName: string, itemDescription:
 
   return data;
 };
+
+export const fetchItems = async (saleId: string) => {
+    const { data, error } = await supabase
+      .from('item')
+      .select('id, name, description')
+      .eq('sale_id', saleId)
+      .eq('is_active', true);
+  
+    if (error) {
+      console.error('Error fetching items:', error);
+      throw error;
+    }
+  
+    return data || [];
+  };
